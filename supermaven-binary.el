@@ -26,7 +26,7 @@
                 ((string-match-p "^arm64-" system-configuration) "aarch64")
                 ((string-match-p "^x86_64-" system-configuration) "x86_64")
                 (t (error "Unsupported architecture: %s" system-configuration))))
-         (url (format "https://supermaven.com/api/download-path?platform=%s&arch=%s&editor=emacs" platform arch))
+         (url (format "https://supermaven.com/api/download-path?platform=%s&arch=%s&editor=neovim" platform arch))
          (_ (supermaven-log-debug (format "Fetching binary URL: %s" url)))
          (response (with-current-buffer
                        (url-retrieve-synchronously url)
@@ -36,7 +36,7 @@
                        (json-read))))
          (download-url (gethash "downloadUrl" response))
          (_ (supermaven-log-debug (format "Download URL: %s" download-url)))
-         (binary-dir (expand-file-name ".supermaven/binary/v15" (getenv "HOME")))
+         (binary-dir (expand-file-name ".supermaven/binary" (getenv "HOME")))
          (binary-path (expand-file-name (format "sm-agent%s" (if (eq system-type 'windows-nt) ".exe" "")) binary-dir)))
 
     (unless (file-exists-p binary-dir)
