@@ -1,6 +1,8 @@
+**Note**: Right now this is NOT working. The agent changed and the protocol changed. Take a look at the issues and PRs, to understand where we are with the effort to fix it.
+
 # Supermaven for Emacs
 
-Supermaven is an AI-powered code completion plugin for Emacs, converted from the official [Supermaven Neovim plugin](https://github.com/supermaven-inc/supermaven-nvim).
+Supermaven is an AI-powered code completion plugin for Emacs, converted from the official Supermaven Neovim [plugin][].
 
 ## Features
 
@@ -146,3 +148,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Original Supermaven Neovim plugin developers
 - The Emacs community for their invaluable resources and documentation
+
+[plugin]: https://github.com/supermaven-inc/supermaven-nvim
