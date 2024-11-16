@@ -15,6 +15,11 @@
   :type 'string
   :group 'supermaven)
 
+(defcustom supermaven-agent-version nil
+  "The version of the Supermaven binary to download and use (nil means the latest version)."
+  :type 'integer
+  :group 'supermaven)
+
 (defun supermaven--fetch-binary ()
   "Fetch the Supermaven binary."
   (let* ((platform (pcase system-type
@@ -26,7 +31,7 @@
                 ((string-match-p "^arm64-" system-configuration) "aarch64")
                 ((string-match-p "^x86_64-" system-configuration) "x86_64")
                 (t (error "Unsupported architecture: %s" system-configuration))))
-         (url (format "https://supermaven.com/api/download-path?platform=%s&arch=%s&editor=emacs" platform arch))
+         (url (format "https://supermaven.com/api/download-path?platform=%s&arch=%s&editor=neovim" platform arch))
          (_ (supermaven-log-debug (format "Fetching binary URL: %s" url)))
          (response (with-current-buffer
                        (url-retrieve-synchronously url)
@@ -34,16 +39,18 @@
                      (re-search-forward "\n\n")
                      (let ((json-object-type 'hash-table))
                        (json-read))))
+         (download-version (or supermaven-agent-version (gethash "version" response)))
          (download-url (gethash "downloadUrl" response))
-         (_ (supermaven-log-debug (format "Download URL: %s" download-url)))
-         (binary-dir (expand-file-name ".supermaven/binary/v15" (getenv "HOME")))
+         (download-url-with-version (replace-regexp-in-string "/[0-9][0-9]/" (concat "/" download-version "/") download-url))
+         (_ (supermaven-log-debug (format "Download URL: %s" download-url-with-version)))
+         (binary-dir (expand-file-name (format ".supermaven/sm-agent/%d/bin" download-version) (getenv "HOME")))
          (binary-path (expand-file-name (format "sm-agent%s" (if (eq system-type 'windows-nt) ".exe" "")) binary-dir)))
 
     (unless (file-exists-p binary-dir)
       (make-directory binary-dir t))
 
     (supermaven-log-info (format "Downloading Supermaven binary to %s" binary-path))
-    (url-copy-file download-url binary-path t)
+    (url-copy-file download-url-with-version binary-path t)
 
     (set-file-modes binary-path #o755)
 
