@@ -41,7 +41,7 @@
                        (json-read))))
          (download-version (or supermaven-agent-version (gethash "version" response)))
          (download-url (gethash "downloadUrl" response))
-         (download-url-with-version (replace-regexp-in-string "/[0-9][0-9]/" (concat "/" download-version "/") download-url))
+         (download-url-with-version (replace-regexp-in-string "/[0-9][0-9]/" (format "/%d/" download-version) download-url))
          (_ (supermaven-log-debug (format "Download URL: %s" download-url-with-version)))
          (binary-dir (expand-file-name (format ".supermaven/sm-agent/%d/bin" download-version) (getenv "HOME")))
          (binary-path (expand-file-name (format "sm-agent%s" (if (eq system-type 'windows-nt) ".exe" "")) binary-dir)))

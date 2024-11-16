@@ -58,6 +58,8 @@ You can customize Supermaven by setting variables in your Emacs configuration fi
 (setq supermaven-agent-version 26)
 ```
 
+Note: When you change the agent-version (either because the lastest has changed or because you did set `supermaven-agent-version`) you probably need to delete `~/.supermaven/config.json` and run `supermaven-use-pro` again to link the current version of sm-agent to your account.
+
 ## Usage
 
 Once installed and configured, Supermaven will automatically provide suggestions as you type in supported file types. Use the configured keybindings to interact with suggestions:
