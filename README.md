@@ -55,6 +55,7 @@ You can customize Supermaven by setting variables in your Emacs configuration fi
         (clear-suggestion . "C-]")
         (accept-word . "C-j")))
 (setq supermaven-log-level 'debug)
+(setq supermaven-agent-version 26)
 ```
 
 ## Usage
